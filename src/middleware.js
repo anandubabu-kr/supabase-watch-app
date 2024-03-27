@@ -5,18 +5,17 @@ export async function middleware(req) {
   const res = NextResponse.next();
   const supabase = createMiddlewareClient({ req, res });
 
-  console.log("middleware");
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (user && req.nextUrl.pathname === "/") {
-    console.log("not logged");
+    console.log("logged in ");
     return NextResponse.redirect(new URL("/watch-list", req.url));
   }
 
   if (!user && req.nextUrl.pathname !== "/") {
-    console.log("logged");
+    console.log("login failed");
     return NextResponse.redirect(new URL("/", req.url));
   }
 
