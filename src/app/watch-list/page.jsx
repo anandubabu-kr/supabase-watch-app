@@ -2,6 +2,7 @@ import React from "react";
 import WatchForm from "../components/WatchForm";
 import { cookies } from "next/headers";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
+import { deleteWatch } from "../server-actions/deleteWatch";
 
 const WatchListPage = async () => {
   const cookieStore = cookies();
@@ -22,8 +23,6 @@ const WatchListPage = async () => {
   if (error) {
     console.log("»»»» ⟪–DEBUG–⟫  »» ", "there was an error");
   }
-
-  console.log("»»»» ⟪–DEBUG–⟫  »» ", watches);
 
   return (
     <div>
@@ -48,13 +47,16 @@ const WatchListPage = async () => {
       <h2 className=" text-center text-lg">My list</h2>
       <div className="flex flex-wrap">
         {watches.map((watch) => (
-          <div className=" bg-slate-200 w-fit min-w-[300px] p-2 rounded-md border border-slate-300 m-2">
+          <div
+            key={watch.id}
+            className=" bg-slate-200 w-fit min-w-[300px] p-2 rounded-md border border-slate-300 m-2"
+          >
             <p>Brand : {watch?.brand} </p>
             <p>Modal: {watch?.modal} </p>
             <p>Reference : {watch?.reference_number} </p>
 
-            <form className="flex justify-end" action="deleteWatch">
-              <input type="hidden" name="id" id={watch.id} />
+            <form className="flex justify-end" action={deleteWatch}>
+              <input type="hidden" name="id" value={watch.id} id={"id"} />
               <button
                 className=" bg-red-600 text-white text-xs py-1 px-4 rounded-md mt-4"
                 type="submit"
